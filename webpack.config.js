@@ -88,24 +88,19 @@ module.exports = function makeWebpackConfig () {
       loader: 'babel',
       exclude: /node_modules/
     }, {
-      // SASS LOADER
-      // Reference: https://github.com/jtangelder/sass-loader
-      test: /\.scss$/,
-      loader: 'style!css!sass'
-    }, {
       // CSS LOADER
       // Reference: https://github.com/webpack/css-loader
       // Allow loading css through js
       //
       // Reference: https://github.com/postcss/postcss-loader
       // Postprocess your css with PostCSS plugins
-      test: /\.css$/,
+      test: /\.(scss|sass)$/,
       // Reference: https://github.com/webpack/extract-text-webpack-plugin
       // Extract css files in production builds
       //
       // Reference: https://github.com/webpack/style-loader
       // Use style-loader in development.
-      loader: isTest ? 'null' : ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
+      loader: isTest ? 'null' : ExtractTextPlugin.extract('style', ['css', 'postcss', 'sass'])
     }, {
       // ASSET LOADER
       // Reference: https://github.com/webpack/file-loader
