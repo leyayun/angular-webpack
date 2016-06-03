@@ -1,25 +1,22 @@
+// import styles
+import 'bootstrap/dist/css/bootstrap.css';
+import './scss/index.scss';
+
+// import library
 import angular from 'angular';
+import uirouter from 'angular-ui-router';
 
-import '../scss/app.scss';
+// import components modules
+import config from './config';
+import consts from './common/constants/';
+import filters from './common/filters/';
+import services from './common/services/';
+import directives from './common/directives/';
 
-let app = () => {
-  return {
-    template: require('./app.html'),
-    controller: 'AppCtrl',
-    controllerAs: 'app'
-  }
-};
+// import business modules
+import home from './home';
 
-class AppCtrl {
-  constructor() {
-    this.url = 'https://github.com/preboot/angular-webpack';
-  }
-}
+export default angular.module('app', [uirouter, home, consts, filters, services, directives])
+  .config(config)
+  .name;
 
-const MODULE_NAME = 'app';
-
-angular.module(MODULE_NAME, [])
-  .directive('app', app)
-  .controller('AppCtrl', AppCtrl);
-
-export default MODULE_NAME;

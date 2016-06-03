@@ -12,15 +12,11 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
  * Get npm lifecycle event to identify the environment
  */
 var ENV = process.env.npm_lifecycle_event;
+
 var isTest = ENV === 'test' || ENV === 'test-watch';
 var isProd = ENV === 'build';
 
 module.exports = function makeWebpackConfig () {
-  /**
-   * Config
-   * Reference: http://webpack.github.io/docs/configuration.html
-   * This is the object where all configuration gets set
-   */
   var config = {};
 
   /**
@@ -85,7 +81,7 @@ module.exports = function makeWebpackConfig () {
       // Transpile .js files using babel-loader
       // Compiles ES6 and ES7 into ES5 code
       test: /\.js$/,
-      loader: 'babel',
+      loaders: ['babel', 'ng-annotate?map=true'],
       exclude: /node_modules/
     }, {
       // CSS LOADER
@@ -94,7 +90,7 @@ module.exports = function makeWebpackConfig () {
       //
       // Reference: https://github.com/postcss/postcss-loader
       // Postprocess your css with PostCSS plugins
-      test: /\.(scss|sass)$/,
+      test: /\.(css|scss|sass)$/,
       // Reference: https://github.com/webpack/extract-text-webpack-plugin
       // Extract css files in production builds
       //
@@ -166,6 +162,14 @@ module.exports = function makeWebpackConfig () {
       // Extract css files
       // Disabled when in test mode or not in build mode
       new ExtractTextPlugin('[name].[hash].css', {disable: !isProd})
+    )
+  }
+
+  if (!isTest && !isProd) {
+    var OpenBrowserPlugin = require('open-browser-webpack-plugin');
+
+    config.plugins.push(
+      new OpenBrowserPlugin({url: 'http://localhost:8080'})
     )
   }
 
